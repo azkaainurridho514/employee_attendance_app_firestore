@@ -1,33 +1,22 @@
-📱 Employee Attendance App — Flutter & Firebase Firestore
+# 📚 Aplikasi Bimbingan Skripsi
 
-Aplikasi absensi karyawan yang dibangun menggunakan Flutter dan Firebase Firestore.
-Dirancang untuk mencatat waktu dan lokasi absensi secara real-time, menampilkan riwayat absensi, serta mengelola data pengguna dengan aman dan efisien.
+Aplikasi absensi karyawan sederhana untuk mencatat kehadiran secara real-time.
+Dibangun menggunakan Flutter sebagai frontend dan Firebase Firestore sebagai backend database.
 
-✨ Fitur Utama
+## ✨ Fitur Utama
+- 👤 **Pengguna**
+  - Login & autentikasi dengan Firebase
+  - Melakukan absensi 
+  - Menyimpan lokasi otomatis (latitude, longitude, alamat)
+  - Melihat riwayat absensi harian
 
-🔐 Autentikasi Firebase
-Login & manajemen pengguna menggunakan Firebase Authentication.
+- 📅 **Fitur Umum**
+  - Penyimpanan dan update data secara real-time
+  - Sorting riwayat absensi berdasarkan tanggal terbaru
+  - Integrasi geolokasi & geocoding
+  - UI responsif dan ringan
 
-🕒 Absensi Real-time
-Menyimpan waktu kehadiran menggunakan Firestore Timestamp.
-
-📍 Deteksi Lokasi Otomatis
-Menyimpan latitude, longitude, dan alamat saat pengguna melakukan absensi.
-
-📄 Riwayat Absensi
-Menampilkan daftar absensi yang diurutkan berdasarkan tanggal terbaru.
-
-👤 Profil Pengguna
-Mengambil nama & email pengguna tanpa perlu expose UID.
-
-🛠 Teknologi yang Digunakan
-
-Flutter (Dart)
-
-Firebase Firestore
-
-Firebase Authentication
-
-Geolocator / Geocoding
-
-Provider (State Management) – opsional
+## 🛠️ Tech Stack
+- **Frontend:** Flutter (Dart)
+- **Database:** Firebase Firestore=
+  
