@@ -90,7 +90,15 @@ class _AbsentPageState extends State<AbsentPage> {
               height: MediaQuery.sizeOf(context).width * 0.7,
               child:
                   startLocation == null
-                      ? Center(child: Text("LOADING"))
+                      ? Center(
+                        child: SizedBox(
+                          width: 30,
+                          height: 30,
+                          child: CircularProgressIndicator(
+                            color: MyColors.border,
+                          ),
+                        ),
+                      )
                       : Stack(
                         children: [
                           GoogleMap(
@@ -174,10 +182,21 @@ class _AbsentPageState extends State<AbsentPage> {
                 spacing: 5,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  textRandom(
-                    text: "Lokasi mu",
-                    size: 13,
-                    fontWeight: FontWeight.w600,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      textRandom(
+                        text: "Lokasi mu",
+                        size: 13,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      longitude.isEmpty || latitude.isEmpty
+                          ? GestureDetector(
+                            onTap: () => getLocation(),
+                            child: Icon(Icons.refresh_rounded, size: 30),
+                          )
+                          : const SizedBox(),
+                    ],
                   ),
                   textRandom(
                     text: location.isEmpty ? "-" : location,
@@ -283,51 +302,66 @@ class _AbsentPageState extends State<AbsentPage> {
     );
   }
 
-  getLocation({bool isCurrentLocation = false}) async {
-    Position position = await Geolocator.getCurrentPosition(
-      desiredAccuracy: LocationAccuracy.high,
-    );
-
-    setState(() {
-      startLocation = LatLng(position.latitude, position.longitude);
-      cameraPosition = CameraPosition(
-        target: LatLng(position.latitude, position.longitude),
-        zoom: 10.0,
-      );
-      latitude = position.latitude.toString();
-      longitude = position.longitude.toString();
-      if (isCurrentLocation == true) {
-        // Helper().LoaderHide();
-        _currentLocation();
+  Future<void> getLocation({bool isCurrentLocation = false}) async {
+    try {
+      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        ToastHelper.showWarning(
+          context: context,
+          title: "Lokasi tidak di nyalakan",
+          description: "Aktifkan GPS untuk melanjutkan.",
+        );
+        return;
       }
-    });
-  }
 
-  Future<Position> getCurrentLocation() async {
-    bool serviceEnabled;
-    LocationPermission permission;
+      LocationPermission permission = await Geolocator.checkPermission();
 
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      return Future.error("Location service is disabled.");
-    }
-
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-        return Future.error("Location permission denied");
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          ToastHelper.showWarning(
+            context: context,
+            title: "Izin lokasi ditolak",
+            description: "Izinkan aplikasi mengakses lokasi.",
+          );
+          return;
+        }
       }
-    }
 
-    if (permission == LocationPermission.deniedForever) {
-      return Future.error(
-        "Location permission permanently denied, enable from settings.",
+      if (permission == LocationPermission.deniedForever) {
+        ToastHelper.showWarning(
+          context: context,
+          title: "Izin lokasi ditolak permanen",
+          description: "Aktifkan izin lokasi dari pengaturan.",
+        );
+        return;
+      }
+
+      Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
+
+      setState(() {
+        startLocation = LatLng(position.latitude, position.longitude);
+        cameraPosition = CameraPosition(
+          target: LatLng(position.latitude, position.longitude),
+          zoom: 10.0,
+        );
+
+        latitude = position.latitude.toString();
+        longitude = position.longitude.toString();
+
+        if (isCurrentLocation == true) {
+          _currentLocation();
+        }
+      });
+    } catch (e) {
+      print("Error get location: $e");
+      ToastHelper.showWarning(
+        context: context,
+        title: "Gagal mendapatkan lokasi",
+        description: "$e",
       );
     }
-
-    return await Geolocator.getCurrentPosition(
-      desiredAccuracy: LocationAccuracy.best,
-    );
   }
 }
