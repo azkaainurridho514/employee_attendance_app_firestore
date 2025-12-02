@@ -1,0 +1,41 @@
+buildscript {
+    ext.kotlin_version = '2.2.21'
+    repositories {
+        google()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:8.4.0'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'com.google.gms:google-services:4.4.0'
+        
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+// Atur build directory untuk root project
+def newBuildDir = rootProject.layout.buildDirectory.dir("../../build").get().asFile
+rootProject.buildDir = newBuildDir
+
+// Atur build directory untuk setiap subproject
+subprojects {
+    def newSubprojectBuildDir = new File(newBuildDir, project.name)
+    project.buildDir = newSubprojectBuildDir
+}
+
+// Pastikan app dievaluasi terlebih dahulu
+subprojects {
+    evaluationDependsOn(':app')
+}
+
+// Task clean
+tasks.register('clean', Delete) {
+    delete rootProject.buildDir
+}

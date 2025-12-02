@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "716312479616",
+    "project_id": "employee-attendance-98fc7",
+    "storage_bucket": "employee-attendance-98fc7.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:716312479616:android:c0494d4be7eda3abe7a365",
+        "android_client_info": {
+          "package_name": "id.kp.employee_attendance"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCL9U6TshXBSXHUdJVo5_lbDakxw5CP_Cs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
