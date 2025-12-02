@@ -18,5 +18,5 @@ Dibangun menggunakan Flutter sebagai frontend dan Firebase Firestore sebagai bac
 
 ## 🛠️ Tech Stack
 - **Frontend:** Flutter (Dart)
-- **Database:** Firebase Firestore=
+- **Database:** Firebase Firestore
   
