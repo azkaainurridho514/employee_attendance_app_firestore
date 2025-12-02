@@ -1,4 +1,4 @@
-# 📚 Aplikasi Bimbingan Skripsi
+# 📚 Employee Attendance App
 
 Aplikasi absensi karyawan sederhana untuk mencatat kehadiran secara real-time.
 Dibangun menggunakan Flutter sebagai frontend dan Firebase Firestore sebagai backend database.
