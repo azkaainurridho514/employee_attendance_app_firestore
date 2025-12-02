@@ -4,7 +4,13 @@ Aplikasi absensi karyawan sederhana untuk mencatat kehadiran secara real-time.
 Dibangun menggunakan Flutter sebagai frontend dan Firebase Firestore sebagai backend database.
 
 ## ✨ Fitur Utama
-- 👤 **Pengguna**
+- 👨‍💼 **Owner**
+  - Melihat seluruh data absensi karyawan
+  - Melihat detail lokasi dan waktu absensi
+  - Dashboard ringkas untuk memantau kehadiran
+  - Melihat seluruh karyawan
+
+- 👤 **Employee**
   - Login & autentikasi dengan Firebase
   - Melakukan absensi 
   - Menyimpan lokasi otomatis (latitude, longitude, alamat)
@@ -12,7 +18,6 @@ Dibangun menggunakan Flutter sebagai frontend dan Firebase Firestore sebagai bac
 
 - 📅 **Fitur Umum**
   - Penyimpanan dan update data secara real-time
-  - Sorting riwayat absensi berdasarkan tanggal terbaru
   - Integrasi geolokasi & geocoding
   - UI responsif dan ringan
 
