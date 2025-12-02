@@ -1,16 +1,27 @@
-# employee_attendance
 
-A new Flutter project.
+# 📚 Employee Attendance App
 
-## Getting Started
+Aplikasi absensi karyawan sederhana untuk mencatat kehadiran secara real-time.
+Dibangun menggunakan Flutter sebagai frontend dan Firebase Firestore sebagai backend database.
 
-This project is a starting point for a Flutter application.
+## ✨ Fitur Utama
+- 👨‍💼 **Owner**
+  - Melihat seluruh data absensi karyawan
+  - Melihat detail lokasi dan waktu absensi
+  - Dashboard ringkas untuk memantau kehadiran
+  - Melihat seluruh karyawan
 
-A few resources to get you started if this is your first Flutter project:
+- 👤 **Employee**
+  - Login & autentikasi dengan Firebase
+  - Melakukan absensi 
+  - Menyimpan lokasi otomatis (latitude, longitude, alamat)
+  - Melihat riwayat absensi harian
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- 📅 **Fitur Umum**
+  - Penyimpanan dan update data secara real-time
+  - Integrasi geolokasi & geocoding
+  - UI responsif dan ringan
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 🛠️ Tech Stack
+- **Frontend:** Flutter (Dart)
+- **Database:** Firebase Firestore
