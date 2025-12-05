@@ -50,19 +50,21 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCL9U6TshXBSXHUdJVo5_lbDakxw5CP_Cs',
-    appId: '1:716312479616:android:c0494d4be7eda3abe7a365',
-    messagingSenderId: '716312479616',
-    projectId: 'employee-attendance-98fc7',
-    storageBucket: 'employee-attendance-98fc7.firebasestorage.app',
+    apiKey: 'AIzaSyADucqpn4vxIMXk2cRxeyd54y3D1KFllVU',
+    appId: '1:821187726780:android:959ef30a54b78269af2fb9',
+    messagingSenderId: '821187726780',
+    projectId: 'absensi-rgk',
+    databaseURL: 'https://absensi-rgk-default-rtdb.firebaseio.com',
+    storageBucket: 'absensi-rgk.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyDf5MSMW2tNFAta0-qR6PKFN5nugDIBJVw',
-    appId: '1:716312479616:ios:aed42143cae8c9cbe7a365',
-    messagingSenderId: '716312479616',
-    projectId: 'employee-attendance-98fc7',
-    storageBucket: 'employee-attendance-98fc7.firebasestorage.app',
-    iosBundleId: 'com.example.employeeAttendance',
+    apiKey: 'AIzaSyApAMcDHW96vkJhcZYHmegWeXBJAWxNcfE',
+    appId: '1:821187726780:ios:33523054da2753c2af2fb9',
+    messagingSenderId: '821187726780',
+    projectId: 'absensi-rgk',
+    databaseURL: 'https://absensi-rgk-default-rtdb.firebaseio.com',
+    storageBucket: 'absensi-rgk.firebasestorage.app',
+    iosBundleId: 'absensi-rgk.firebasestorage.app',
   );
 }

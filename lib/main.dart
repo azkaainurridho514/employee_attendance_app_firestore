@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:employee_attendance/firebase_options.dart';
+import 'package:employee_attendance/providers/download_attendance_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => AbsentProvider()),
+        ChangeNotifierProvider(create: (_) => DownloadAttendanceProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

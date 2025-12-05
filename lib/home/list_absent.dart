@@ -99,7 +99,7 @@ class _ListAbsentState extends State<ListAbsent> {
   }) {
     return Container(
       width: MediaQuery.sizeOf(context).width,
-      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(5)),
         color: MyColors.primary,

@@ -1,18 +1,24 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools"
- package="id.kp.employee_attendance">
+ package="com.example.rgk">
+ <!-- package="id.kp.employee_attendance"> -->
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+
 
     <application
         android:label="employee_attendance"
         android:icon="@mipmap/ic_launcher">
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyCGcQEMTBYL94DFamJ5AbuolRNtnoxR4Sk"/>
+            android:value="AIzaSyCB3neU_1n1gnddeUVKj9NuJrZRuTkCefw"/>
+            <!-- android:value="AIzaSyCGcQEMTBYL94DFamJ5AbuolRNtnoxR4Sk"/> -->
         <activity
             android:name=".MainActivity"
             android:exported="true"

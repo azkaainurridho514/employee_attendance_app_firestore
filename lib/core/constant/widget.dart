@@ -108,6 +108,11 @@ class ToastHelper {
 
 enum CherryToastVariant { success, error, warning, info }
 
+String formatToNameFile(DateTime dateTime) {
+  final DateFormat formatter = DateFormat('dd_MMMM_yyyy_HH_mm');
+  return formatter.format(dateTime);
+}
+
 String formatDateTime(DateTime dateTime) {
   final DateFormat formatter = DateFormat('dd MMMM yyyy, HH:mm');
   return formatter.format(dateTime);

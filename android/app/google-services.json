@@ -1,21 +1,22 @@
 {
   "project_info": {
-    "project_number": "716312479616",
-    "project_id": "employee-attendance-98fc7",
-    "storage_bucket": "employee-attendance-98fc7.firebasestorage.app"
+    "project_number": "821187726780",
+    "firebase_url": "https://absensi-rgk-default-rtdb.firebaseio.com",
+    "project_id": "absensi-rgk",
+    "storage_bucket": "absensi-rgk.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:716312479616:android:c0494d4be7eda3abe7a365",
+        "mobilesdk_app_id": "1:821187726780:android:959ef30a54b78269af2fb9",
         "android_client_info": {
-          "package_name": "id.kp.employee_attendance"
+          "package_name": "com.example.rgk"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCL9U6TshXBSXHUdJVo5_lbDakxw5CP_Cs"
+          "current_key": "AIzaSyADucqpn4vxIMXk2cRxeyd54y3D1KFllVU"
         }
       ],
       "services": {

@@ -46,11 +46,12 @@ class AuthProvider extends ChangeNotifier {
               .collection('users')
               .where('email', isEqualTo: email)
               .where('password', isEqualTo: password)
+              .where('is_active', isEqualTo: true)
               .get();
 
       if (querySnapshot.docs.isEmpty) {
         setLoading(false);
-        setMessage("Email atau password salah!");
+        setMessage("Credential salah / akun belum aktif");
         return;
       }
 
@@ -96,6 +97,7 @@ class AuthProvider extends ChangeNotifier {
         "email": email,
         "password": password,
         "role": textEmployee,
+        "is_active": true,
         "createdAt": FieldValue.serverTimestamp(),
       });
 

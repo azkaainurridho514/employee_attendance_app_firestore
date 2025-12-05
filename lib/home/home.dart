@@ -24,6 +24,20 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  late Stream<List<Map<String, dynamic>>> attendanceStream;
+  late Stream<List<Map<String, dynamic>>> attendanceByIdStream;
+
+  @override
+  void initState() {
+    super.initState();
+
+    final provider = Provider.of<AbsentProvider>(context, listen: false);
+    final auth = Provider.of<AuthProvider>(context, listen: false);
+
+    attendanceStream = provider.getAllAttendances();
+    attendanceByIdStream = provider.getAttendancesByUserId(auth.user!.id);
+  }
+
   @override
   Widget build(BuildContext context) {
     var user = context.read<AuthProvider>().user;
@@ -73,40 +87,6 @@ class _HomePageState extends State<HomePage> {
               ),
               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 3),
               child: textRandom(text: "Lihat", size: 10, color: Colors.white),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildCardOwner({required String name, required String date}) {
-    return Container(
-      width: MediaQuery.sizeOf(context).width,
-      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(5)),
-        color: MyColors.primary,
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            flex: 5,
-            child: textRandom(
-              text: name,
-              fontWeight: FontWeight.bold,
-              size: 15,
-              color: Colors.white,
-            ),
-          ),
-          Expanded(flex: 1, child: const SizedBox()),
-          Expanded(
-            flex: 5,
-            child: textRandom(
-              text: date,
-              size: 12,
-              textAlign: TextAlign.right,
-              color: Colors.white,
             ),
           ),
         ],
@@ -238,7 +218,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildStreamBuilderOwner() {
     return StreamBuilder<List<Map<String, dynamic>>>(
-      stream: context.watch<AbsentProvider>().getAttendances(),
+      stream: attendanceStream,
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return Center(
@@ -291,7 +271,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildStreamBuilderEmployee(String id) {
     return StreamBuilder<List<Map<String, dynamic>>>(
-      stream: context.watch<AbsentProvider>().getAttendancesByUserId(id),
+      stream: attendanceByIdStream,
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return Center(
@@ -450,7 +430,8 @@ class _HomePageState extends State<HomePage> {
                                 builder: (context) => AbsentPage(),
                               ),
                             );
-                          } else if (prov.user!.role == textOwner) {
+                          } else if (prov.user!.role == textOwner ||
+                              prov.user!.role == textAdmin) {
                             Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (context) => UsersPage(),

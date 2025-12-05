@@ -28,10 +28,7 @@ class Detail extends StatefulWidget {
 
 class _DetailState extends State<Detail> {
   late GoogleMapController mapController;
-
-  void _onMapCreated(GoogleMapController controller) {
-    mapController = controller;
-  }
+  Set<Marker> _markers = {};
 
   @override
   Widget build(BuildContext context) {
@@ -59,25 +56,42 @@ class _DetailState extends State<Detail> {
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(color: MyColors.border, width: 1.0),
               ),
-              child: Stack(
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: GoogleMap(
-                      onMapCreated: _onMapCreated,
-                      initialCameraPosition: CameraPosition(
-                        target: LatLng(
-                          double.tryParse(widget.latitude) ?? 0,
-                          double.tryParse(widget.longitude) ?? 0,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: GoogleMap(
+                  markers: _markers,
+                  onMapCreated: (controller) {
+                    setState(() {
+                      mapController = controller;
+                      _markers.add(
+                        Marker(
+                          markerId: const MarkerId("current_location"),
+                          position: LatLng(
+                            double.tryParse(widget.latitude) ?? 0,
+                            double.tryParse(widget.longitude) ?? 0,
+                          ),
+                          icon: BitmapDescriptor.defaultMarkerWithHue(
+                            BitmapDescriptor.hueRed,
+                          ),
                         ),
-                        zoom: 15,
-                      ),
+                      );
+                    });
+                  },
+                  initialCameraPosition: CameraPosition(
+                    target: LatLng(
+                      double.tryParse(widget.latitude) ?? 0,
+                      double.tryParse(widget.longitude) ?? 0,
                     ),
+                    zoom: 20.0,
                   ),
-                  Center(
-                    child: Icon(Icons.location_on, size: 45, color: Colors.red),
-                  ),
-                ],
+                  mapType: MapType.satellite,
+                  myLocationEnabled: false,
+                  myLocationButtonEnabled: false,
+                  scrollGesturesEnabled: false,
+                  zoomGesturesEnabled: false,
+                  rotateGesturesEnabled: false,
+                  tiltGesturesEnabled: false,
+                ),
               ),
             ),
 

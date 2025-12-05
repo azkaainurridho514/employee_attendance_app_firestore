@@ -17,7 +17,6 @@ class AbsentPage extends StatefulWidget {
 }
 
 class _AbsentPageState extends State<AbsentPage> {
-  List<Marker> _markers = [];
   GoogleMapController? mapController;
   CameraPosition? cameraPosition;
 
@@ -43,8 +42,10 @@ class _AbsentPageState extends State<AbsentPage> {
   String? postalCode;
   String? country;
   String? street;
+  String? detail;
   String? subadministrativearea;
   String location = "...";
+  Set<Marker> _markers = {};
   @override
   void initState() {
     getLocation();
@@ -99,74 +100,77 @@ class _AbsentPageState extends State<AbsentPage> {
                           ),
                         ),
                       )
-                      : Stack(
-                        children: [
-                          GoogleMap(
-                            padding: EdgeInsets.only(top: 30),
-                            initialCameraPosition: CameraPosition(
-                              target: LatLng(
-                                startLocation!.latitude,
-                                startLocation!.longitude,
+                      : GoogleMap(
+                        padding: EdgeInsets.only(top: 30),
+                        markers: _markers,
+                        onMapCreated: (controller) {
+                          setState(() {
+                            mapController = controller;
+                            _markers.add(
+                              Marker(
+                                markerId: const MarkerId("current_location"),
+                                position: LatLng(
+                                  startLocation!.latitude,
+                                  startLocation!.longitude,
+                                ),
+                                icon: BitmapDescriptor.defaultMarkerWithHue(
+                                  BitmapDescriptor.hueRed,
+                                ),
                               ),
-                              zoom: 18.0,
-                            ),
-                            mapType: MapType.normal,
-                            myLocationEnabled: false,
-                            myLocationButtonEnabled: false,
-                            onMapCreated: (controller) {
+                            );
+                          });
+                        },
+                        initialCameraPosition: CameraPosition(
+                          target: LatLng(
+                            startLocation!.latitude,
+                            startLocation!.longitude,
+                          ),
+                          zoom: 20.0,
+                        ),
+                        mapType: MapType.satellite,
+                        myLocationEnabled: false,
+                        myLocationButtonEnabled: false,
+                        onCameraMove: (CameraPosition cameraPositiona) {
+                          cameraPosition = cameraPositiona;
+                        },
+                        zoomControlsEnabled: false,
+                        scrollGesturesEnabled: false,
+                        zoomGesturesEnabled: false,
+                        rotateGesturesEnabled: false,
+                        tiltGesturesEnabled: false,
+                        onCameraIdle: () async {
+                          List<Placemark> placemarks =
+                              await placemarkFromCoordinates(
+                                cameraPosition!.target.latitude,
+                                cameraPosition!.target.longitude,
+                              );
+
+                          try {
+                            if (placemarks.isNotEmpty) {
+                              Placemark place = placemarks.first;
                               setState(() {
-                                mapController = controller;
+                                startLocation = LatLng(
+                                  cameraPosition!.target.latitude,
+                                  cameraPosition!.target.longitude,
+                                );
+
+                                name = placemarks.first.name;
+                                subLocality = placemarks.first.subLocality;
+                                locality = placemarks.first.locality;
+                                subadministrativearea =
+                                    placemarks.first.subAdministrativeArea;
+                                administrativeArea =
+                                    placemarks.first.administrativeArea;
+                                postalCode = placemarks.first.postalCode;
+                                country = placemarks.first.country;
+                                street = placemarks.first.street;
+                                detail = placemarks.first.thoroughfare;
+                                location =
+                                    "$street, $detail $subLocality, $locality, $subadministrativearea, $administrativeArea, $country";
                               });
-                            },
-                            onCameraMove: (CameraPosition cameraPositiona) {
-                              cameraPosition = cameraPositiona;
-                            },
-                            zoomControlsEnabled: false,
-                            scrollGesturesEnabled: false,
-                            zoomGesturesEnabled: false,
-                            rotateGesturesEnabled: false,
-                            tiltGesturesEnabled: false,
-                            onCameraIdle: () async {
-                              List<Placemark> placemarks =
-                                  await placemarkFromCoordinates(
-                                    cameraPosition!.target.latitude,
-                                    cameraPosition!.target.longitude,
-                                  );
-
-                              try {
-                                if (placemarks.isNotEmpty) {
-                                  Placemark place = placemarks.first;
-                                  setState(() {
-                                    startLocation = LatLng(
-                                      cameraPosition!.target.latitude,
-                                      cameraPosition!.target.longitude,
-                                    );
-
-                                    name = placemarks.first.name;
-                                    subLocality = placemarks.first.subLocality;
-                                    locality = placemarks.first.locality;
-                                    subadministrativearea =
-                                        placemarks.first.subAdministrativeArea;
-                                    administrativeArea =
-                                        placemarks.first.administrativeArea;
-                                    postalCode = placemarks.first.postalCode;
-                                    country = placemarks.first.country;
-                                    street = placemarks.first.street;
-                                    location =
-                                        "$street, $subLocality, $locality, $subadministrativearea, $administrativeArea, $country, $postalCode";
-                                  });
-                                }
-                              } catch (e) {}
-                            },
-                          ),
-                          Center(
-                            child: Icon(
-                              Icons.location_on,
-                              size: 45,
-                              color: Colors.red,
-                            ),
-                          ),
-                        ],
+                            }
+                          } catch (e) {}
+                        },
                       ),
             ),
             Container(
@@ -190,12 +194,10 @@ class _AbsentPageState extends State<AbsentPage> {
                         size: 13,
                         fontWeight: FontWeight.w600,
                       ),
-                      longitude.isEmpty || latitude.isEmpty
-                          ? GestureDetector(
-                            onTap: () => getLocation(),
-                            child: Icon(Icons.refresh_rounded, size: 30),
-                          )
-                          : const SizedBox(),
+                      GestureDetector(
+                        onTap: () => getLocation(),
+                        child: Icon(Icons.refresh_rounded, size: 30),
+                      ),
                     ],
                   ),
                   textRandom(
@@ -238,7 +240,10 @@ class _AbsentPageState extends State<AbsentPage> {
         child: IntrinsicHeight(
           child: GestureDetector(
             onTap: () {
-              if (longitude.isEmpty || latitude.isEmpty || location.isEmpty) {
+              if (longitude.isEmpty ||
+                  latitude.isEmpty ||
+                  location == "..." ||
+                  startLocation == null) {
                 ToastHelper.showWarning(
                   context: context,
                   title: "Lokasimu belum di temukan!",
@@ -270,7 +275,7 @@ class _AbsentPageState extends State<AbsentPage> {
                 }
                 return Container(
                   margin: EdgeInsets.all(15),
-                  padding: EdgeInsets.symmetric(vertical: 10),
+                  padding: EdgeInsets.symmetric(vertical: 15),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(100),
                     color: MyColors.primary,

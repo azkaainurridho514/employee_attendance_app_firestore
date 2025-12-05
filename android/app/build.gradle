@@ -7,7 +7,8 @@ plugins {
 }
 
 android {
-    namespace 'id.kp.employee_attendance'
+    namespace 'com.example.rgk'
+    // namespace 'id.kp.employee_attendance'
     compileSdk flutter.compileSdkVersion
     // ndkVersion flutter.ndkVersion
     ndkVersion = "27.0.12077973"
@@ -23,7 +24,8 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID
-        applicationId 'id.kp.employee_attendance'
+        applicationId 'com.example.rgk'
+        // applicationId 'id.kp.employee_attendance'
         minSdk flutter.minSdkVersion
         targetSdk flutter.targetSdkVersion
         versionCode flutter.versionCode
@@ -42,5 +44,11 @@ android {
 flutter {
     source '../..'
 }
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'com.google.firebase:firebase-analytics'
+}
+
 
 apply plugin: 'com.google.gms.google-services'
