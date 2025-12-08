@@ -422,48 +422,89 @@ class _HomePageState extends State<HomePage> {
                       if (prov.user == null) {
                         return const SizedBox();
                       }
-                      return GestureDetector(
-                        onTap: () {
-                          if (prov.user!.role == textEmployee) {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => AbsentPage(),
+                      return Row(
+                        spacing: 4,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          prov.user!.role == textAdmin
+                              ? GestureDetector(
+                                onTap: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) => AbsentPage(),
+                                    ),
+                                  );
+                                },
+                                child: Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Container(
+                                    margin: EdgeInsets.symmetric(vertical: 1),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(100),
+                                      ),
+                                      color: MyColors.button,
+                                    ),
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 10,
+                                      vertical: 5,
+                                    ),
+                                    child: textRandom(
+                                      text: "Absen",
+                                      size: 10,
+                                      color: Colors.white,
+                                      textAlign: TextAlign.center,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              )
+                              : const SizedBox(),
+                          GestureDetector(
+                            onTap: () {
+                              if (prov.user!.role == textEmployee) {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => AbsentPage(),
+                                  ),
+                                );
+                              } else if (prov.user!.role == textOwner ||
+                                  prov.user!.role == textAdmin) {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => UsersPage(),
+                                  ),
+                                );
+                              }
+                            },
+                            child: Align(
+                              alignment: Alignment.centerRight,
+                              child: Container(
+                                margin: EdgeInsets.symmetric(vertical: 1),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(100),
+                                  ),
+                                  color: MyColors.button,
+                                ),
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 10,
+                                  vertical: 5,
+                                ),
+                                child: textRandom(
+                                  text:
+                                      prov.user!.role == textEmployee
+                                          ? "Absen"
+                                          : "Users",
+                                  size: 10,
+                                  color: Colors.white,
+                                  textAlign: TextAlign.center,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                            );
-                          } else if (prov.user!.role == textOwner ||
-                              prov.user!.role == textAdmin) {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => UsersPage(),
-                              ),
-                            );
-                          }
-                        },
-                        child: Align(
-                          alignment: Alignment.centerRight,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(100),
-                              ),
-                              color: MyColors.button,
-                            ),
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 20,
-                              vertical: 5,
-                            ),
-                            child: textRandom(
-                              text:
-                                  prov.user!.role == textEmployee
-                                      ? "Absen"
-                                      : "Users",
-                              size: 13,
-                              color: Colors.white,
-                              textAlign: TextAlign.center,
-                              fontWeight: FontWeight.bold,
                             ),
                           ),
-                        ),
+                        ],
                       );
                     },
                   ),
