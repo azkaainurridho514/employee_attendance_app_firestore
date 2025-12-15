@@ -159,7 +159,7 @@
 //   Stream<List<Map<String, dynamic>>> getAllUsers() {
 //     return _firestore
 //         .collection('users')
-//         .where('role', whereIn: [textEmployee, textAdmin])
+//         .where('role', whereIn: [textKaryawan, textAdmin])
 //         .snapshots()
 //         .map((snapshot) {
 //           return snapshot.docs.map((doc) {
@@ -202,8 +202,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:employee_attendance/core/constant/text.dart';
 import 'package:flutter/material.dart';
 
+import '../core/constant/widget.dart';
+
+final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
 class AbsentProvider extends ChangeNotifier {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  // final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   bool _isLoading = false;
   bool get isLoading => _isLoading;
@@ -221,9 +225,6 @@ class AbsentProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // ====================================================
-  // 🟦 CACHES
-  // ====================================================
   List<Map<String, dynamic>> _cachedUsers = [];
   List<Map<String, dynamic>> get cachedUsers => _cachedUsers;
 
@@ -306,9 +307,9 @@ class AbsentProvider extends ChangeNotifier {
   Stream<List<Map<String, dynamic>>> getAllUsers({required bool isAll}) {
     List getUser = [];
     if (isAll) {
-      getUser = [textEmployee, textAdmin];
+      getUser = [textKaryawan, textAdmin];
     } else {
-      getUser = [textEmployee];
+      getUser = [textKaryawan];
     }
     return _firestore
         .collection('users')
@@ -464,6 +465,111 @@ class AbsentProvider extends ChangeNotifier {
               "latitude": data['latitude'],
               "longitude": data['longitude'],
               "address": data['address'],
+              "description": data['description'],
+              "user_id": userId,
+              "user": userData,
+            });
+          }
+
+          return result;
+        });
+  }
+}
+
+class RequestProvider extends ChangeNotifier {
+  bool _isLoading = false;
+  bool get isLoading => _isLoading;
+
+  String _message = "";
+  String get message => _message;
+
+  void setMessage(String value) {
+    _message = value;
+    notifyListeners();
+  }
+
+  void setLoading(bool value) {
+    _isLoading = value;
+    notifyListeners();
+  }
+
+  Future<void> addRequest(
+    BuildContext context, {
+    required String userID,
+    required DateTime dateTime,
+    DateTime? date,
+    DateTime? startDate,
+    DateTime? endDate,
+    required String description,
+    required String type,
+  }) async {
+    setLoading(true);
+
+    try {
+      await _firestore.collection('requests').add({
+        "user_id": userID,
+        "datetime": dateTime,
+        "date": date,
+        "start_date": startDate,
+        "end_date": endDate,
+        "description": description,
+        "type": type,
+      });
+
+      setLoading(false);
+      _message = "Berhasil di ajukan!";
+    } catch (e) {
+      setLoading(false);
+      _message = "Server Error!";
+      print("Error: $e");
+    }
+  }
+
+  Stream<List<Map<String, dynamic>>> getRequestByType(String type) {
+    return _firestore
+        .collection('requests')
+        .where('type', isEqualTo: type)
+        .orderBy('datetime', descending: true)
+        .snapshots()
+        .asyncMap((snapshot) async {
+          final List<Map<String, dynamic>> result = [];
+
+          for (final doc in snapshot.docs) {
+            final data = doc.data();
+            final userId = data['user_id'];
+
+            Map<String, dynamic>? userData;
+
+            try {
+              final cacheSnap = await _firestore
+                  .collection('users')
+                  .doc(userId)
+                  .get(const GetOptions(source: Source.cache));
+
+              userData = cacheSnap.data();
+            } catch (_) {}
+
+            if (userData == null) {
+              try {
+                final serverSnap = await _firestore
+                    .collection('users')
+                    .doc(userId)
+                    .get(const GetOptions(source: Source.server));
+
+                userData = serverSnap.data();
+              } catch (_) {
+                userData = null;
+              }
+            }
+
+            if (userData == null) continue;
+            result.add({
+              "requestId": doc.id,
+              "datetime": data['datetime'],
+              "type": data['type'],
+              "date": data['date'],
+              "start_date": data['start_date'],
+              "end_date": data['end_date'],
               "description": data['description'],
               "user_id": userId,
               "user": userData,

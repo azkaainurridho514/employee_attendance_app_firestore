@@ -96,7 +96,7 @@ class AuthProvider extends ChangeNotifier {
         "name": username,
         "email": email,
         "password": password,
-        "role": textEmployee,
+        "role": textKaryawan,
         "is_active": true,
         "createdAt": FieldValue.serverTimestamp(),
       });

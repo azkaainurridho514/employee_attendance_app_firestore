@@ -1,17 +1,10 @@
-import 'dart:io';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:employee_attendance/core/colors/colors.dart';
 import 'package:employee_attendance/core/constant/text.dart';
-import 'package:employee_attendance/home/detail.dart';
 import 'package:employee_attendance/providers/auth_provider.dart';
 import 'package:employee_attendance/providers/stream_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../core/constant/widget.dart';
-import 'package:pdf/widgets.dart' as pw;
-import 'package:pdf/pdf.dart';
-import 'package:path_provider/path_provider.dart';
 
 import '../providers/download_attendance_provider.dart';
 
@@ -450,13 +443,13 @@ class _ChangeRoleBottomSheetState extends State<ChangeRoleBottomSheet> {
                 Expanded(
                   child: ChoiceChip(
                     label: textRandom(
-                      text: textEmployee,
+                      text: textKaryawan,
                       size: 12,
                       fontWeight: FontWeight.w500,
                     ),
-                    selected: selectedType == textEmployee,
+                    selected: selectedType == textKaryawan,
                     onSelected: (_) {
-                      setState(() => selectedType = textEmployee);
+                      setState(() => selectedType = textKaryawan);
                     },
                   ),
                 ),

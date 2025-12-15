@@ -1,5 +1,6 @@
 import 'package:cherry_toast/cherry_toast.dart';
 import 'package:cherry_toast/resources/arrays.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -118,8 +119,13 @@ String formatDateTime(DateTime dateTime) {
   return formatter.format(dateTime);
 }
 
+String formatddDDMMMYYYY(DateTime dateTime) {
+  final DateFormat formatter = DateFormat('EEEE, dd MMMM yyyy', 'id_ID');
+  return formatter.format(dateTime);
+}
+
 String formatDateOnly(DateTime dateTime) {
-  final DateFormat formatter = DateFormat('dd MMMM yyyy');
+  final DateFormat formatter = DateFormat('dd MMMM yyyy', 'id_ID');
   return formatter.format(dateTime);
 }
 
@@ -131,4 +137,23 @@ String formatHourOnly(DateTime dateTime) {
 String formatHourMinuteOnly(DateTime dateTime) {
   final DateFormat formatter = DateFormat('HH:mm:ss');
   return formatter.format(dateTime);
+}
+
+String formatHourMinuteTime(DateTime dateTime) {
+  final DateFormat formatter = DateFormat('HH:mm a');
+  return formatter.format(dateTime);
+}
+
+DateTime? parseFirestoreDate(dynamic value) {
+  if (value == null) return null;
+
+  if (value is Timestamp) {
+    return value.toDate();
+  }
+
+  if (value is String) {
+    return DateTime.tryParse(value);
+  }
+
+  return null;
 }
