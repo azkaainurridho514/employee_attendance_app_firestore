@@ -157,3 +157,81 @@ DateTime? parseFirestoreDate(dynamic value) {
 
   return null;
 }
+
+bool isLate({required int sesi, required DateTime dateTime}) {
+  // batas waktu per sesi (dalam menit)
+  final Map<int, int> batasSesi = {
+    1: 5 * 60 + 30, // 05:30
+    2: 6 * 60 + 30, // 06:30
+  };
+  print(sesi);
+  if (!batasSesi.containsKey(sesi)) {
+    print("Sesi tidak valid");
+    return false;
+  }
+
+  // waktu sekarang dalam menit
+  final int nowInMinutes = dateTime.hour * 60 + dateTime.minute;
+
+  // batas sesi dalam menit
+  final int batasInMinutes = batasSesi[sesi]!;
+
+  final bool terlambat = nowInMinutes > batasInMinutes;
+
+  print(
+    terlambat
+        ? "Terlambat! Melewati batas sesi $sesi"
+        : "Tepat waktu untuk sesi $sesi",
+  );
+
+  return terlambat;
+}
+
+Duration getDurasiTerlambat(int sesi, Timestamp absenTimestamp) {
+  DateTime absenTime = absenTimestamp.toDate();
+  DateTime batasWaktu;
+
+  if (sesi == 1) {
+    batasWaktu = DateTime(
+      absenTime.year,
+      absenTime.month,
+      absenTime.day,
+      5,
+      30,
+    );
+  } else {
+    batasWaktu = DateTime(
+      absenTime.year,
+      absenTime.month,
+      absenTime.day,
+      6,
+      30,
+    );
+  }
+
+  if (absenTime.isAfter(batasWaktu)) {
+    return absenTime.difference(batasWaktu);
+  }
+
+  return Duration.zero;
+}
+
+String formatDurasiTerlambat(Duration durasi) {
+  if (durasi.inMinutes == 0) return "Tepat waktu";
+
+  int jam = durasi.inHours;
+  int menit = durasi.inMinutes.remainder(60);
+
+  if (jam > 0) {
+    return "Terlambat $jam jam $menit menit";
+  } else {
+    return "Terlambat $menit menit";
+  }
+}
+
+String truncateString(String text, int maxLength) {
+  if (text.length <= maxLength) {
+    return text;
+  }
+  return '${text.substring(0, maxLength)}...';
+}

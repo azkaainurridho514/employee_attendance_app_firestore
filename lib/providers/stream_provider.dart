@@ -243,6 +243,7 @@ class AbsentProvider extends ChangeNotifier {
     required String longitude,
     required String description,
     required String address,
+    required int sesi,
   }) async {
     setLoading(true);
 
@@ -254,6 +255,7 @@ class AbsentProvider extends ChangeNotifier {
         "longitude": longitude,
         "description": description,
         "address": address,
+        "sesi": sesi,
       });
 
       setLoading(false);
@@ -409,6 +411,7 @@ class AbsentProvider extends ChangeNotifier {
               "datetime": data['datetime'],
               "latitude": data['latitude'],
               "longitude": data['longitude'],
+              "sesi": data['sesi'],
               "address": data['address'],
               "description": data['description'],
               "user_id": userId,
@@ -465,6 +468,7 @@ class AbsentProvider extends ChangeNotifier {
               "latitude": data['latitude'],
               "longitude": data['longitude'],
               "address": data['address'],
+              "sesi": data['sesi'],
               "description": data['description'],
               "user_id": userId,
               "user": userData,

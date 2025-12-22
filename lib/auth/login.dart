@@ -20,6 +20,7 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController username = TextEditingController();
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
+  TextEditingController sesi = TextEditingController();
   bool isRegister = false;
   @override
   void initState() {
@@ -166,11 +167,21 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 50),
+                  SizedBox(height: MediaQuery.sizeOf(context).height * 0.02),
                   Consumer<AuthProvider>(
                     builder: (context, prov, child) {
                       if (!isRegister) {
-                        if (prov.user != null && prov.message.isNotEmpty) {
+                        if (prov.user == null && prov.message.isNotEmpty) {
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            ToastHelper.showInfo(
+                              context: context,
+                              title: prov.message,
+                            );
+                            context.read<AuthProvider>().setLoading(false);
+                            context.read<AuthProvider>().setMessage("");
+                          });
+                        } else if (prov.user != null &&
+                            prov.message.isNotEmpty) {
                           WidgetsBinding.instance.addPostFrameCallback((_) {
                             ToastHelper.showSuccess(
                               context: context,
@@ -187,10 +198,24 @@ class _LoginPageState extends State<LoginPage> {
                           });
                         } else if (prov.message.isNotEmpty && !prov.isLoading) {
                           WidgetsBinding.instance.addPostFrameCallback((_) {
-                            ToastHelper.showError(
+                            ToastHelper.showInfo(
                               context: context,
                               title: prov.message,
                             );
+                            context.read<AuthProvider>().setLoading(false);
+                            context.read<AuthProvider>().setMessage("");
+                          });
+                        }
+                      } else {
+                        if (prov.message.isNotEmpty) {
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            ToastHelper.showInfo(
+                              context: context,
+                              title: prov.message,
+                            );
+                            if (prov.message == "Berhasil register") {
+                              setState(() => isRegister = false);
+                            }
                             context.read<AuthProvider>().setLoading(false);
                             context.read<AuthProvider>().setMessage("");
                           });
@@ -232,7 +257,7 @@ class _LoginPageState extends State<LoginPage> {
                                     ),
                                   )
                                   : textRandom(
-                                    text: isRegister ? "Daftar" : "login",
+                                    text: isRegister ? "Daftar" : "Login",
                                     size: 12,
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,
@@ -257,11 +282,18 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       GestureDetector(
                         onTap: () => setState(() => isRegister = !isRegister),
-                        child: textRandom(
-                          text: isRegister ? "Login" : "Register",
-                          size: 10,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
+                        child: Container(
+                          color: Colors.transparent,
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 2,
+                            horizontal: 5,
+                          ),
+                          child: textRandom(
+                            text: isRegister ? "Login" : "Register",
+                            size: 10,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
                         ),
                       ),
                     ],

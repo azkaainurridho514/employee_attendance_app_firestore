@@ -69,6 +69,7 @@ class _ListAbsentState extends State<ListAbsent> {
                                 desc: att['description'] ?? "",
                                 date: att['datetime'] ?? "",
                                 name: user?['name'] ?? 'User tidak ditemukan',
+                                sesi: att['sesi'] ?? 0,
                                 latitude: att['latitude'] ?? "",
                                 longitude: att['longitude'] ?? "",
                               );
@@ -96,13 +97,14 @@ class _ListAbsentState extends State<ListAbsent> {
     required dynamic date,
     required String longitude,
     required String latitude,
+    required int sesi,
   }) {
     return Container(
       width: MediaQuery.sizeOf(context).width,
       padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(5)),
-        color: MyColors.primary,
+        border: Border.all(color: MyColors.border, width: 1.0),
       ),
       child: Row(
         children: [
@@ -116,13 +118,13 @@ class _ListAbsentState extends State<ListAbsent> {
                   text: name,
                   fontWeight: FontWeight.bold,
                   size: 15,
-                  color: Colors.white,
+                  color: Colors.black,
                 ),
                 textRandom(
                   text: formatDateTime((date as Timestamp).toDate()),
                   size: 11,
                   textAlign: TextAlign.left,
-                  color: Colors.white,
+                  color: Colors.black,
                 ),
               ],
             ),
@@ -143,6 +145,7 @@ class _ListAbsentState extends State<ListAbsent> {
                               date: date,
                               longitude: longitude,
                               latitude: latitude,
+                              sesi: sesi,
                             ),
                       ),
                     ),

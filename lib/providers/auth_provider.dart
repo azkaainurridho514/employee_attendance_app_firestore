@@ -91,7 +91,6 @@ class AuthProvider extends ChangeNotifier {
         setMessage("Semua field harus di isi!");
         return;
       }
-
       await _firestore.collection('users').add({
         "name": username,
         "email": email,
@@ -102,7 +101,6 @@ class AuthProvider extends ChangeNotifier {
       });
 
       setLoading(false);
-      ToastHelper.showSuccess(context: context, title: "Berhasil Register");
       _message = "Berhasil register";
     } catch (e) {
       setLoading(false);

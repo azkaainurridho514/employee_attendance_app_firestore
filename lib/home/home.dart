@@ -534,6 +534,7 @@ import '../core/colors/colors.dart';
 import '../core/widgets/buttons.dart';
 import '../providers/stream_provider.dart';
 import 'absent.dart';
+import 'list_absent.dart';
 import 'permohonan.dart';
 import 'users.dart';
 
@@ -751,15 +752,41 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                 ),
                                 Row(
-                                  spacing: 5,
                                   children: [
-                                    SvgPicture.asset(MyIcons.icHistory),
-                                    textRandom(
-                                      text: "Histori Absen",
-                                      size: 11,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black,
+                                    Expanded(
+                                      child: Row(
+                                        spacing: 5,
+                                        children: [
+                                          SvgPicture.asset(MyIcons.icHistory),
+                                          textRandom(
+                                            text: "Histori Absen",
+                                            size: 11,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black,
+                                          ),
+                                        ],
+                                      ),
                                     ),
+                                    context.read<AuthProvider>().user!.role ==
+                                                textOwner ||
+                                            context
+                                                    .read<AuthProvider>()
+                                                    .user!
+                                                    .role ==
+                                                textAdmin
+                                        ? GestureDetector(
+                                          onTap:
+                                              () => Navigator.of(context).push(
+                                                MaterialPageRoute(
+                                                  builder:
+                                                      (context) => ListAbsent(),
+                                                ),
+                                              ),
+                                          child: Icon(
+                                            Icons.remove_red_eye_outlined,
+                                          ),
+                                        )
+                                        : const SizedBox(),
                                   ],
                                 ),
                                 const SizedBox(height: 15),
@@ -828,6 +855,7 @@ class _HomePageState extends State<HomePage> {
                                                         name:
                                                             user?['name'] ??
                                                             'User tidak ditemukan',
+                                                        sesi: att['sesi'] ?? 0,
                                                         latitude:
                                                             att['latitude'] ??
                                                             "",
@@ -880,6 +908,7 @@ class _HomePageState extends State<HomePage> {
     required String name,
     required String latitude,
     required String longitude,
+    required int sesi,
   }) {
     return Column(
       children: [
@@ -891,9 +920,12 @@ class _HomePageState extends State<HomePage> {
                 text:
                     context.read<AuthProvider>().user!.role == textKaryawan
                         ? formatddDDMMMYYYY((date as Timestamp).toDate())
-                        : "$name, ${formatDateOnly((date).toDate())}",
+                        : "${truncateString(name, 8)}, ${formatDateOnly((date).toDate())}",
                 size: 11,
-                color: MyColors.border,
+                color:
+                    isLate(sesi: sesi, dateTime: (date).toDate())
+                        ? MyColors.softRed
+                        : MyColors.softGreen,
               ),
             ),
             Expanded(
@@ -904,13 +936,19 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   SvgPicture.asset(
                     MyIcons.icTime,
-                    color: Colors.black,
+                    color:
+                        isLate(sesi: sesi, dateTime: (date).toDate())
+                            ? MyColors.softRed
+                            : MyColors.softGreen,
                     width: 17,
                   ),
                   textRandom(
                     text: formatHourOnly((date).toDate()),
                     size: 11,
-                    color: Colors.black,
+                    color:
+                        isLate(sesi: sesi, dateTime: (date).toDate())
+                            ? MyColors.softRed
+                            : MyColors.softGreen,
                     fontWeight: FontWeight.bold,
                   ),
                 ],

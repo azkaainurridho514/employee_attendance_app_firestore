@@ -137,22 +137,38 @@ class _UsersPageState extends State<UsersPage> {
           ),
           context.read<AuthProvider>().user!.role == textAdmin
               ? Expanded(
-                child: Align(
-                  alignment: Alignment.centerRight,
-                  child: GestureDetector(
-                    onTap:
-                        () => showChangeEmployeeSheet(
-                          context,
-                          isActive: isActive,
-                          id: id,
-                          name: name,
-                        ),
-                    child: Icon(
-                      Icons.edit_note_rounded,
-                      size: 25,
-                      color: Colors.white,
+                child: Wrap(
+                  spacing: 5,
+                  alignment: WrapAlignment.end,
+                  children: [
+                    GestureDetector(
+                      onTap:
+                          () => showChangeEmployeeSheet(
+                            context,
+                            isActive: isActive,
+                            id: id,
+                            name: name,
+                          ),
+                      child: Icon(
+                        Icons.edit_note_rounded,
+                        size: 25,
+                        color: Colors.white,
+                      ),
                     ),
-                  ),
+                    GestureDetector(
+                      onTap:
+                          () => showDownloadAttendanceSheet(
+                            context,
+                            id: id,
+                            name: name,
+                          ),
+                      child: Icon(
+                        Icons.downloading_rounded,
+                        size: 25,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
                 ),
               )
               : context.read<AuthProvider>().user!.role == textOwner

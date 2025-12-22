@@ -12,6 +12,7 @@ class Detail extends StatefulWidget {
   final String latitude;
   final String desc;
   final String address;
+  final int sesi;
   const Detail({
     super.key,
     required this.name,
@@ -20,6 +21,7 @@ class Detail extends StatefulWidget {
     required this.latitude,
     required this.desc,
     required this.address,
+    required this.sesi,
   });
 
   @override
@@ -117,6 +119,15 @@ class _DetailState extends State<Detail> {
                   ),
                   _buildList("Latitude", widget.longitude),
                   _buildList("Longitude", widget.latitude),
+                  _buildListStatus(widget.date),
+                  isLate(dateTime: (widget.date).toDate(), sesi: widget.sesi)
+                      ? textRandom(
+                        text: formatDurasiTerlambat(
+                          getDurasiTerlambat(widget.sesi, widget.date),
+                        ),
+                        size: 11,
+                      )
+                      : const SizedBox(),
                   _buildListColumn("Alamat", widget.address),
                   _buildListColumn("Deskripsi", widget.desc),
                 ],
@@ -125,6 +136,36 @@ class _DetailState extends State<Detail> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildListStatus(date) {
+    return Row(
+      children: [
+        Expanded(
+          child: textRandom(
+            text: "Status Absen",
+            size: 13,
+            fontWeight: FontWeight.w400,
+            color: Colors.black,
+          ),
+        ),
+        Expanded(
+          child: textRandom(
+            text:
+                isLate(dateTime: (widget.date).toDate(), sesi: widget.sesi)
+                    ? "Terlambat"
+                    : "Tepat Waktu",
+            size: 13,
+            textAlign: TextAlign.end,
+            fontWeight: FontWeight.bold,
+            color:
+                isLate(dateTime: (widget.date).toDate(), sesi: widget.sesi)
+                    ? MyColors.softRed
+                    : MyColors.softGreen,
+          ),
+        ),
+      ],
     );
   }
 

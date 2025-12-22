@@ -52,6 +52,8 @@ class _AbsentPageState extends State<AbsentPage> {
     super.initState();
   }
 
+  bool sesi1 = false, sesi2 = false;
+
   TextEditingController desc = TextEditingController();
 
   @override
@@ -210,6 +212,100 @@ class _AbsentPageState extends State<AbsentPage> {
               ),
             ),
             Container(
+              padding: const EdgeInsets.only(right: 10, left: 10, top: 10),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: InkWell(
+                      onTap: () {
+                        setState(() {
+                          sesi1 = true;
+                          sesi2 = false;
+                        });
+                      },
+                      child: Row(
+                        children: [
+                          Transform.scale(
+                            scale: 0.8,
+                            child: Checkbox(
+                              value: sesi1,
+                              onChanged: (bool? value) {
+                                setState(() {
+                                  sesi1 = value ?? false;
+                                  if (sesi1) sesi2 = false;
+                                });
+                              },
+                              activeColor: Colors.blue,
+                              materialTapTargetSize:
+                                  MaterialTapTargetSize.shrinkWrap,
+                            ),
+                          ),
+                          SizedBox(width: 4),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                textRandom(
+                                  text: "Sesi 1",
+                                  size: 13,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                textRandom(text: "Batas : 05:30", size: 11),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  Expanded(
+                    child: InkWell(
+                      onTap: () {
+                        setState(() {
+                          sesi2 = true;
+                          sesi1 = false;
+                        });
+                      },
+                      child: Row(
+                        children: [
+                          Transform.scale(
+                            scale: 0.8,
+                            child: Checkbox(
+                              value: sesi2,
+                              onChanged: (bool? value) {
+                                setState(() {
+                                  sesi2 = value ?? false;
+                                  if (sesi2) sesi1 = false;
+                                });
+                              },
+                              activeColor: Colors.blue,
+                              materialTapTargetSize:
+                                  MaterialTapTargetSize.shrinkWrap,
+                            ),
+                          ),
+                          SizedBox(width: 4),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                textRandom(
+                                  text: "Sesi 2",
+                                  size: 13,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                textRandom(text: "Batas : 06:30", size: 11),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Container(
               margin: EdgeInsets.only(top: 10, right: 15, left: 15),
               child: TextField(
                 controller: desc,
@@ -250,6 +346,11 @@ class _AbsentPageState extends State<AbsentPage> {
                 );
                 return;
               }
+              if (!sesi1 && !sesi2) {
+                ToastHelper.showWarning(context: context, title: "Pilih sesi");
+                return;
+              }
+
               context.read<AbsentProvider>().addAbsent(
                 context,
                 userID: context.read<AuthProvider>().user!.id.toString(),
@@ -258,6 +359,7 @@ class _AbsentPageState extends State<AbsentPage> {
                 longitude: longitude,
                 description: desc.text,
                 address: location,
+                sesi: sesi1 ? 1 : 2,
               );
             },
             child: Consumer<AbsentProvider>(
