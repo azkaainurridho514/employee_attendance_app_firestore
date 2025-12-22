@@ -13,8 +13,8 @@
 
 
     <application
-        android:label="employee_attendance"
-        android:icon="@mipmap/ic_launcher">
+        android:label="RGK Absensi"
+        android:icon="@mipmap/ic">
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCB3neU_1n1gnddeUVKj9NuJrZRuTkCefw"/>
